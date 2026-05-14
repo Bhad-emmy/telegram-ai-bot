@@ -1,38 +1,23 @@
+# Telegram AI Bot
 
-# Telegram AI Bot Workflow
+AI-powered Telegram bot built with:
 
-A Telegram automation workflow built with Make.com while learning AI automation and Python.
+- Telegram Bot API
+- Make.com
+- Gemini API
+- HTTP modules
 
 ## Features
 
-* Telegram message trigger
-* Automated workflow execution
-* AI-ready integration structure
-* Make.com compatible JSON workflow export
+- AI responses
+- Telegram integration
+- Workflow automation
+- API routing
 
-## Tools Used
+## Project Goal
 
-* Make.com
-* Telegram Bot API
-* VS Code
-* Git & GitHub
+Learning AI automation and backend workflow systems while building in public.
 
-## Workflow File
+## Author
 
-Located in:
-
-```text
-/workflows/make-telegram-bot-workflow.json
-```
-
-## Goal
-
-This repository is part of my public learning journey in:
-
-* AI Automation
-* Python
-* Workflow Engineering
-* Building in public
-
-GitHub: https://github.com/Bhad-emmy
-
+Edwin MEKA
