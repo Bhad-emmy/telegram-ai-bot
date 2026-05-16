@@ -11,8 +11,8 @@
             "mapper": {},
             "metadata": {
                 "designer": {
-                    "x": -188,
-                    "y": -39
+                    "x": -385,
+                    "y": -214
                 },
                 "restore": {
                     "parameters": {
@@ -61,14 +61,471 @@
                                     [
                                         {
                                             "a": "{{1.message.text}}",
-                                            "b": "/start",
-                                            "o": "text:equal"
+                                            "o": "text:equal:ci",
+                                            "b": "/start"
                                         }
                                     ]
                                 ]
                             },
                             "mapper": {
-                                "text": "Welcome to MEKA AI 🤖\r\n\r\nAsk me anything and I’ll answer intelligently.\r\n\r\nBuilt with Make.com + Gemini AI.",
+                                "chatId": "{{1.message.chat.id}}",
+                                "text": "Hello Edwin 👋\r\n\r\nI'm Edwin AI Bot.\r\n\r\nYou can ask me:\r\n\r\n• Study questions\r\n• Explanations\r\n• Python help\r\n• Ideas\r\n• General questions\r\n\r\nAsk me anything 🚀",
+                                "messageThreadId": "",
+                                "parseMode": "",
+                                "replyToMessageId": "",
+                                "replyMarkupAssembleType": "reply_markup_enter",
+                                "replyMarkup": ""
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 333,
+                                    "y": -478
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "label": "My Telegram Bot connection",
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            }
+                                        }
+                                    },
+                                    "expect": {
+                                        "parseMode": {
+                                            "label": "Empty"
+                                        },
+                                        "disableNotification": {
+                                            "mode": "chose"
+                                        },
+                                        "replyMarkupAssembleType": {
+                                            "label": "Enter the Reply Markup"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messageThreadId",
+                                        "type": "number",
+                                        "label": "Message Thread ID"
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "disableWebPagePreview",
+                                        "type": "boolean",
+                                        "label": "Disable Link Previews"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 8,
+                            "module": "http:MakeRequest",
+                            "version": 4,
+                            "parameters": {
+                                "authenticationType": "noAuth",
+                                "tlsType": "",
+                                "proxyKeychain": ""
+                            },
+                            "filter": {
+                                "name": "[Normal Chat]",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "1. Message: Text",
+                                            "o": "text:notstartwith",
+                                            "b": ""
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "url": "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent",
+                                "method": "post",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "queryParameters": [
+                                    {
+                                        "name": "key",
+                                        "value": "Hidden"
+                                    }
+                                ],
+                                "contentType": "custom",
+                                "parseResponse": true,
+                                "stopOnHttpError": true,
+                                "allowRedirects": true,
+                                "shareCookies": false,
+                                "requestCompressedContent": true,
+                                "contentTypeValue": "application/json",
+                                "rawBodyContent": "{\r\n  \"contents\": [\r\n    {\r\n      \"parts\": [\r\n        {\r\n          \"text\": \"You are a smart, friendly Telegram AI assistant. Always respond clearly and naturally using clean formatting. Avoid JSON formatting, escape characters, markdown symbols, or raw code unless requested.\\n\\nUser message:\\n{{1.message.text}}\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 333,
+                                    "y": -178
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "authenticationType": {
+                                            "label": "No authenticationUse when no credentials are required for the request."
+                                        },
+                                        "tlsType": {
+                                            "label": "Empty"
+                                        },
+                                        "proxyKeychain": {
+                                            "label": "Choose a key"
+                                        }
+                                    },
+                                    "expect": {
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "POST"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "queryParameters": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "contentType": {
+                                            "label": "CustomEnter data using a custom content type, such as text/plain."
+                                        },
+                                        "parseResponse": {
+                                            "mode": "chose"
+                                        },
+                                        "stopOnHttpError": {
+                                            "mode": "chose"
+                                        },
+                                        "allowRedirects": {
+                                            "mode": "chose"
+                                        },
+                                        "shareCookies": {
+                                            "mode": "chose"
+                                        },
+                                        "requestCompressedContent": {
+                                            "mode": "chose"
+                                        },
+                                        "paginationType": {
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "authenticationType",
+                                        "type": "select",
+                                        "label": "Authentication type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "noAuth",
+                                                "apiKey",
+                                                "basicAuth",
+                                                "oAuth"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "tlsType",
+                                        "type": "select",
+                                        "label": "Transport layer security (TLS)",
+                                        "validate": {
+                                            "enum": [
+                                                "mTls",
+                                                "tls"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "proxyKeychain",
+                                        "type": "keychain:proxy",
+                                        "label": "Proxy"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "spec": {
+                                            "name": "value",
+                                            "label": "Header",
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "name",
+                                                    "label": "Name",
+                                                    "type": "text",
+                                                    "required": true,
+                                                    "validate": {
+                                                        "pattern": "^[-!#$%&'*+.^_`|~0-9A-Za-z]+$"
+                                                    }
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "label": "Value",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "queryParameters",
+                                        "type": "array",
+                                        "label": "Query parameters",
+                                        "spec": {
+                                            "name": "value",
+                                            "label": "Parameter",
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "name",
+                                                    "label": "Name",
+                                                    "type": "text",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "label": "Value",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "contentType",
+                                        "type": "select",
+                                        "label": "Body content type",
+                                        "validate": {
+                                            "enum": [
+                                                "json",
+                                                "multipart",
+                                                "urlEncoded",
+                                                "custom"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "stopOnHttpError",
+                                        "type": "boolean",
+                                        "label": "Return error if HTTP request fails",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "min": 1,
+                                            "max": 300
+                                        }
+                                    },
+                                    {
+                                        "name": "allowRedirects",
+                                        "type": "boolean",
+                                        "label": "Allow redirects",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "requestCompressedContent",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "contentTypeValue",
+                                        "type": "text",
+                                        "label": "Content type value",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "rawBodyContent",
+                                        "type": "buffer",
+                                        "label": "Body content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "paginationType",
+                                        "type": "select",
+                                        "label": "Pagination type",
+                                        "validate": {
+                                            "enum": [
+                                                "offsetBased",
+                                                "pageBased",
+                                                "urlBased",
+                                                "tokenBased"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "data",
+                                        "label": "Data",
+                                        "type": "any"
+                                    },
+                                    {
+                                        "name": "statusCode",
+                                        "label": "Status Code",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "label": "Headers",
+                                        "type": "collection",
+                                        "spec": [
+                                            {
+                                                "name": "content-length",
+                                                "label": "Content-Length",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "content-encoding",
+                                                "label": "Content-Encoding",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "content-type",
+                                                "label": "Content-Type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "server",
+                                                "label": "Server",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "cache-control",
+                                                "label": "Cache-Control",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "set-cookie",
+                                                "label": "Set-Cookie",
+                                                "type": "array",
+                                                "spec": {
+                                                    "type": "text"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "telegram:SendReplyMessage",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 7280364
+                            },
+                            "mapper": {
+                                "text": "{{8.data.candidates[].content.parts[].text}}",
                                 "chatId": "{{1.message.chat.id}}",
                                 "parseMode": "",
                                 "replyMarkup": "",
@@ -78,8 +535,8 @@
                             },
                             "metadata": {
                                 "designer": {
-                                    "x": 219,
-                                    "y": -237
+                                    "x": 1151,
+                                    "y": 174
                                 },
                                 "restore": {
                                     "expect": {
@@ -179,366 +636,48 @@
                 {
                     "flow": [
                         {
-                            "id": 8,
-                            "module": "http:MakeRequest",
-                            "version": 4,
-                            "parameters": {
-                                "tlsType": "",
-                                "proxyKeychain": "",
-                                "authenticationType": "noAuth"
-                            },
-                            "filter": {
-                                "name": "",
-                                "conditions": [
-                                    [
-                                        {
-                                            "a": "1. Message: Text",
-                                            "b": "/",
-                                            "o": "text:notstartwith"
-                                        }
-                                    ]
-                                ]
-                            },
-                            "mapper": {
-                                "url": "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent",
-                                "method": "post",
-                                "headers": [
-                                    {
-                                        "name": "Content-Type",
-                                        "value": "application/json"
-                                    }
-                                ],
-                                "contentType": "custom",
-                                "shareCookies": false,
-                                "parseResponse": true,
-                                "allowRedirects": true,
-                                "rawBodyContent": "{\r\n  \"contents\": [\r\n    {\r\n      \"parts\": [\r\n        {\r\n          \"text\": \"You are a smart, friendly Telegram AI assistant. Always respond clearly and naturally using clean formatting. Avoid JSON formatting, escape characters, markdown symbols, or raw code unless requested.\\n\\nUser message:\\n{{1.message.text}}\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}",
-                                "queryParameters": [
-                                    {
-                                        "name": "key",
-                                        "value": "HIDDEN"
-                                    }
-                                ],
-                                "stopOnHttpError": true,
-                                "contentTypeValue": "application/json",
-                                "requestCompressedContent": true
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 250,
-                                    "y": 161
-                                },
-                                "restore": {
-                                    "expect": {
-                                        "method": {
-                                            "mode": "chose",
-                                            "label": "POST"
-                                        },
-                                        "headers": {
-                                            "mode": "chose",
-                                            "items": [
-                                                null
-                                            ]
-                                        },
-                                        "contentType": {
-                                            "label": "CustomEnter data using a custom content type, such as text/plain."
-                                        },
-                                        "shareCookies": {
-                                            "mode": "chose"
-                                        },
-                                        "parseResponse": {
-                                            "mode": "chose"
-                                        },
-                                        "allowRedirects": {
-                                            "mode": "chose"
-                                        },
-                                        "paginationType": {
-                                            "label": "Empty"
-                                        },
-                                        "queryParameters": {
-                                            "mode": "chose",
-                                            "items": [
-                                                null
-                                            ]
-                                        },
-                                        "stopOnHttpError": {
-                                            "mode": "chose"
-                                        },
-                                        "requestCompressedContent": {
-                                            "mode": "chose"
-                                        }
-                                    },
-                                    "parameters": {
-                                        "tlsType": {
-                                            "label": "Empty"
-                                        },
-                                        "proxyKeychain": {
-                                            "label": "Choose a key"
-                                        },
-                                        "authenticationType": {
-                                            "label": "No authenticationUse when no credentials are required for the request."
-                                        }
-                                    }
-                                },
-                                "parameters": [
-                                    {
-                                        "name": "authenticationType",
-                                        "type": "select",
-                                        "label": "Authentication type",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "noAuth",
-                                                "apiKey",
-                                                "basicAuth",
-                                                "oAuth"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "tlsType",
-                                        "type": "select",
-                                        "label": "Transport layer security (TLS)",
-                                        "validate": {
-                                            "enum": [
-                                                "mTls",
-                                                "tls"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "proxyKeychain",
-                                        "type": "keychain:proxy",
-                                        "label": "Proxy"
-                                    }
-                                ],
-                                "expect": [
-                                    {
-                                        "name": "url",
-                                        "type": "url",
-                                        "label": "URL",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "method",
-                                        "type": "select",
-                                        "label": "Method",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "get",
-                                                "head",
-                                                "post",
-                                                "put",
-                                                "patch",
-                                                "delete",
-                                                "options"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": {
-                                            "name": "value",
-                                            "spec": [
-                                                {
-                                                    "name": "name",
-                                                    "type": "text",
-                                                    "label": "Name",
-                                                    "required": true,
-                                                    "validate": {
-                                                        "pattern": "^[-!#$%&'*+.^_`|~0-9A-Za-z]+$"
-                                                    }
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Header"
-                                        },
-                                        "type": "array",
-                                        "label": "Headers"
-                                    },
-                                    {
-                                        "name": "queryParameters",
-                                        "spec": {
-                                            "name": "value",
-                                            "spec": [
-                                                {
-                                                    "name": "name",
-                                                    "type": "text",
-                                                    "label": "Name",
-                                                    "required": true
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Parameter"
-                                        },
-                                        "type": "array",
-                                        "label": "Query parameters"
-                                    },
-                                    {
-                                        "name": "contentType",
-                                        "type": "select",
-                                        "label": "Body content type",
-                                        "validate": {
-                                            "enum": [
-                                                "json",
-                                                "multipart",
-                                                "urlEncoded",
-                                                "custom"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "parseResponse",
-                                        "type": "boolean",
-                                        "label": "Parse response",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "stopOnHttpError",
-                                        "type": "boolean",
-                                        "label": "Return error if HTTP request fails",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "timeout",
-                                        "type": "uinteger",
-                                        "label": "Timeout",
-                                        "validate": {
-                                            "max": 300,
-                                            "min": 1
-                                        }
-                                    },
-                                    {
-                                        "name": "allowRedirects",
-                                        "type": "boolean",
-                                        "label": "Allow redirects",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "shareCookies",
-                                        "type": "boolean",
-                                        "label": "Share cookies with other HTTP modules",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "requestCompressedContent",
-                                        "type": "boolean",
-                                        "label": "Request compressed content",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "contentTypeValue",
-                                        "type": "text",
-                                        "label": "Content type value",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "rawBodyContent",
-                                        "type": "buffer",
-                                        "label": "Body content",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "paginationType",
-                                        "type": "select",
-                                        "label": "Pagination type",
-                                        "validate": {
-                                            "enum": [
-                                                "offsetBased",
-                                                "pageBased",
-                                                "urlBased",
-                                                "tokenBased"
-                                            ]
-                                        }
-                                    }
-                                ],
-                                "interface": [
-                                    {
-                                        "name": "data",
-                                        "type": "any",
-                                        "label": "Data"
-                                    },
-                                    {
-                                        "name": "statusCode",
-                                        "type": "number",
-                                        "label": "Status Code"
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": [
-                                            {
-                                                "name": "content-length",
-                                                "type": "text",
-                                                "label": "Content-Length"
-                                            },
-                                            {
-                                                "name": "content-encoding",
-                                                "type": "text",
-                                                "label": "Content-Encoding"
-                                            },
-                                            {
-                                                "name": "content-type",
-                                                "type": "text",
-                                                "label": "Content-Type"
-                                            },
-                                            {
-                                                "name": "server",
-                                                "type": "text",
-                                                "label": "Server"
-                                            },
-                                            {
-                                                "name": "cache-control",
-                                                "type": "text",
-                                                "label": "Cache-Control"
-                                            },
-                                            {
-                                                "name": "set-cookie",
-                                                "spec": {
-                                                    "type": "text"
-                                                },
-                                                "type": "array",
-                                                "label": "Set-Cookie"
-                                            }
-                                        ],
-                                        "type": "collection",
-                                        "label": "Headers"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "id": 10,
+                            "id": 11,
                             "module": "telegram:SendReplyMessage",
                             "version": 1,
                             "parameters": {
                                 "__IMTCONN__": 7280364
                             },
+                            "filter": {
+                                "name": "Help Command",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.message.text}}",
+                                            "o": "text:startwith",
+                                            "b": "/help"
+                                        }
+                                    ]
+                                ]
+                            },
                             "mapper": {
-                                "text": "{{8.data.candidates[].content.parts[].text}}",
                                 "chatId": "{{1.message.chat.id}}",
-                                "parseMode": "",
-                                "replyMarkup": "",
+                                "text": "📖 Available Commands\r\n\r\n/start — Start the bot\r\n/help — View available commands\r\n\r\nExamples:\r\n\r\n• What is AI?\r\n• Explain Python loops\r\n• Give me business ideas\r\n• Help me study chemistry\r\n\r\nAsk me anything 🚀",
                                 "messageThreadId": "",
+                                "parseMode": "",
                                 "replyToMessageId": "",
-                                "replyMarkupAssembleType": "reply_markup_enter"
+                                "replyMarkupAssembleType": "reply_markup_enter",
+                                "replyMarkup": ""
                             },
                             "metadata": {
                                 "designer": {
-                                    "x": 1151,
-                                    "y": 174
+                                    "x": 333,
+                                    "y": 122
                                 },
                                 "restore": {
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "label": "My Telegram Bot connection",
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            }
+                                        }
+                                    },
                                     "expect": {
                                         "parseMode": {
                                             "label": "Empty"
@@ -549,14 +688,135 @@
                                         "replyMarkupAssembleType": {
                                             "label": "Enter the Reply Markup"
                                         }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
                                     },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messageThreadId",
+                                        "type": "number",
+                                        "label": "Message Thread ID"
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "disableWebPagePreview",
+                                        "type": "boolean",
+                                        "label": "Disable Link Previews"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 13,
+                            "module": "telegram:SendReplyMessage",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 7280364
+                            },
+                            "filter": {
+                                "name": "About Command",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.message.text}}",
+                                            "o": "text:startwith",
+                                            "b": "/about"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "chatId": "{{1.message.chat.id}}",
+                                "text": "🤖 Edwin AI Bot\r\n\r\nVersion: 1.0\r\n\r\nPowered by:\r\n• Telegram\r\n• Make.com\r\n• Google Gemini AI\r\n\r\nCreated by Edwin 🚀\r\n\r\nI can answer questions, explain topics, help with ideas and assist with learning.",
+                                "messageThreadId": "",
+                                "parseMode": "",
+                                "replyToMessageId": "",
+                                "replyMarkupAssembleType": "reply_markup_enter",
+                                "replyMarkup": ""
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 333,
+                                    "y": 422
+                                },
+                                "restore": {
                                     "parameters": {
                                         "__IMTCONN__": {
+                                            "label": "My Telegram Bot connection",
                                             "data": {
                                                 "scoped": "true",
                                                 "connection": "telegram"
-                                            },
-                                            "label": "My Telegram Bot connection"
+                                            }
+                                        }
+                                    },
+                                    "expect": {
+                                        "parseMode": {
+                                            "label": "Empty"
+                                        },
+                                        "disableNotification": {
+                                            "mode": "chose"
+                                        },
+                                        "replyMarkupAssembleType": {
+                                            "label": "Enter the Reply Markup"
                                         }
                                     }
                                 },
